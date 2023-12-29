@@ -6,11 +6,14 @@
 /*   By: hdamitzi <hdamitzi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 17:32:58 by hdamitzi          #+#    #+#             */
-/*   Updated: 2023/12/29 17:21:29 by hdamitzi         ###   ########.fr       */
+/*   Updated: 2023/12/29 18:30:14 by hdamitzi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/BitcoinExchange.hpp"
+
+//utilisation remove if white space
+
 
 void checkArgs(int ac) {
     if (ac != 2)
@@ -18,12 +21,28 @@ void checkArgs(int ac) {
     return ;
 }
 
+//get the date check the for;at YYYY-MM-DD
 int checkDate(std::string date) {
-    
+    std::cout << "checkdate :" << date << ":" <<std::endl;
+    // int day, month, year;
+
+    // if (sscanf(date.c_str(), "%4d-%2d-%2d", &year, &month, &day) != 3)
+    //     std::cerr << "date probleme : " << date << std::endl;
+    // else if (year < 1900 || year > 2099 || month < 1 || month > 12 || day < 1 || day > 31)
+    //     std::cerr << "Invalid date format in line: " << date << '\n';
+    // else {
+    //     std::cout << "date = " << year << "-" << month << "-" << day << std::endl;
+    // }
+    return 1;
 }
 
-int checkValue(std::string value) {
-    
+int checkValue(std::string valueStr) {
+    std::cout << "checkvalue :" << valueStr << ":" << std::endl;
+    return 1;
+}
+
+bool isSpaceOrTab(char c) {
+    return (c == ' ' || c == '\t');
 }
 
 void checkDatabase(std::string databasePath) {
@@ -35,24 +54,30 @@ void checkDatabase(std::string databasePath) {
         case S_IFDIR: throw(std::runtime_error("Arguments is a directory"));
         case S_IXUSR: throw(std::runtime_error("Argument is binary"));
     }
-    std::ifstream fs(databasePath.c_str());//ouverture du ifstream ici pas besoin de plus 
+
+    //ouverture du ifstream ici pas besoin de plus 
+    std::ifstream fs(databasePath.c_str());
+    
     if (!fs.is_open())
         throw (std::runtime_error("Error Database"));
 
     std::string line;
+    
     while (std::getline(fs, line)) {
+        
         //verifier que le format date | value est repecté
-        std::istringstream iss(line);
+        //trim whites saces line  >> YYYY-MM-DD|VV
+        
         //check if each line contqins one |
         std::string::size_type pos = line.find('|');
+        
         //check if pos isnt at the end of the line
         if (pos == std::string::npos )
             std::cerr << "Not a good format in line : " << line << std::endl;
-        //get the date check the for;at YYYY-MM-DD
-        if (!checkDate((line.substr(0, pos))) || !checkValue((line.substr(pos + 1))))
+        else if (!checkDate((line.substr(0, pos))) || !checkValue((line.substr(pos + 1))))
             std::cerr << "invalid format in the line : " << line << std::endl;
         else
-            std::cout << line << std::endl;
+            std::cout << "check database after the checks" << line << std::endl;
     }
     return;
 }
