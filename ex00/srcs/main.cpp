@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hdamitzi <hdamitzi@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: hdamitzi <hdamitzi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 17:32:58 by hdamitzi          #+#    #+#             */
-/*   Updated: 2023/12/22 10:11:33 by hdamitzi         ###   ########.fr       */
+/*   Updated: 2023/12/29 17:21:29 by hdamitzi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,14 @@ void checkArgs(int ac) {
     return ;
 }
 
+int checkDate(std::string date) {
+    
+}
+
+int checkValue(std::string value) {
+    
+}
+
 void checkDatabase(std::string databasePath) {
     struct stat sb;
 
@@ -27,7 +35,7 @@ void checkDatabase(std::string databasePath) {
         case S_IFDIR: throw(std::runtime_error("Arguments is a directory"));
         case S_IXUSR: throw(std::runtime_error("Argument is binary"));
     }
-    std::ifstream fs(databasePath.c_str());//ouvertur du ifstream ici pas besoin de plus 
+    std::ifstream fs(databasePath.c_str());//ouverture du ifstream ici pas besoin de plus 
     if (!fs.is_open())
         throw (std::runtime_error("Error Database"));
 
@@ -35,9 +43,16 @@ void checkDatabase(std::string databasePath) {
     while (std::getline(fs, line)) {
         //verifier que le format date | value est repecté
         std::istringstream iss(line);
-        
-        
-        std::cout << line << std::endl;
+        //check if each line contqins one |
+        std::string::size_type pos = line.find('|');
+        //check if pos isnt at the end of the line
+        if (pos == std::string::npos )
+            std::cerr << "Not a good format in line : " << line << std::endl;
+        //get the date check the for;at YYYY-MM-DD
+        if (!checkDate((line.substr(0, pos))) || !checkValue((line.substr(pos + 1))))
+            std::cerr << "invalid format in the line : " << line << std::endl;
+        else
+            std::cout << line << std::endl;
     }
     return;
 }
