@@ -6,7 +6,7 @@
 /*   By: hdamitzi <hdamitzi@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 17:07:26 by hdamitzi          #+#    #+#             */
-/*   Updated: 2023/12/22 10:11:24 by hdamitzi         ###   ########.fr       */
+/*   Updated: 2023/12/22 20:01:49 by hdamitzi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 # include <ctime>
 # include <map>
 # include <sys/stat.h>
+# include <algorithm>
+# include <string>
 
 class  BitcoinExchange
 {

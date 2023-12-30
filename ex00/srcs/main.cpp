@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hdamitzi <hdamitzi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hdamitzi <hdamitzi@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 17:32:58 by hdamitzi          #+#    #+#             */
-/*   Updated: 2023/12/29 18:30:14 by hdamitzi         ###   ########.fr       */
+/*   Updated: 2023/12/29 23:33:02 by hdamitzi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,24 +23,28 @@ void checkArgs(int ac) {
 
 //get the date check the for;at YYYY-MM-DD
 int checkDate(std::string date) {
-    std::cout << "checkdate :" << date << ":" <<std::endl;
-    // int day, month, year;
+     int day, month, year;
 
-    // if (sscanf(date.c_str(), "%4d-%2d-%2d", &year, &month, &day) != 3)
-    //     std::cerr << "date probleme : " << date << std::endl;
-    // else if (year < 1900 || year > 2099 || month < 1 || month > 12 || day < 1 || day > 31)
-    //     std::cerr << "Invalid date format in line: " << date << '\n';
-    // else {
-    //     std::cout << "date = " << year << "-" << month << "-" << day << std::endl;
-    // }
-    return 1;
+     if (sscanf(date.c_str(), "%4d-%2d-%2d", &year, &month, &day) != 3)
+         std::cerr << "date probleme : " << date << std::endl;
+     else if (year < 1900 || year > 2099 || month < 1 || month > 12 || day < 1 || day > 31)
+         std::cerr << "Invalid date format in line: " << date << '\n';
+     else {
+         std::cout << "date = " << year << "-" << month << "-" << day << std::endl;
+     }
+    return (1);
 }
 
 int checkValue(std::string valueStr) {
-    std::cout << "checkvalue :" << valueStr << ":" << std::endl;
-    return 1;
+    int intValue;
+    float floatValue;
+
+    if (sscanf(valueStr.c_str(), "%d", &intValue) == 1)
+        return 
+    return (1);
 }
 
+//function to trim spaces from input
 bool isSpaceOrTab(char c) {
     return (c == ' ' || c == '\t');
 }
@@ -68,10 +72,10 @@ void checkDatabase(std::string databasePath) {
         //verifier que le format date | value est repecté
         //trim whites saces line  >> YYYY-MM-DD|VV
         
+        line.erase(std::remove_if(line.begin(), line.end(), isSpaceOrTab), line.end());
         //check if each line contqins one |
-        std::string::size_type pos = line.find('|');
-        
-        //check if pos isnt at the end of the line
+        std::string::size_type pos = line.find('|'); 
+        ////check if pos isnt at the end of the line if so >>> fuck off
         if (pos == std::string::npos )
             std::cerr << "Not a good format in line : " << line << std::endl;
         else if (!checkDate((line.substr(0, pos))) || !checkValue((line.substr(pos + 1))))
