@@ -1,42 +1,37 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   BitcoinExchange.hpp                                :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: hdamitzi <hdamitzi@student.42lyon.fr>      +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/21 17:07:26 by hdamitzi          #+#    #+#             */
-/*   Updated: 2023/12/22 20:01:49 by hdamitzi         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
+#ifndef BITCOINEXCHANGE_CLASS_H
+# define BITCOINEXCHANGE_CLASS_H
 
-#ifndef BITCOINEXCHANGE_HPP
-# define BITCOINEXCHANGE_HPP
 # include <iostream>
 # include <fstream>
-# include <sstream>
-# include <ctime>
-# include <map>
-# include <sys/stat.h>
-# include <algorithm>
 # include <string>
+# include <cstring>
+# include <map>
+# include <ctime>
+# include <sstream>
+# include <utility>
 
-class  BitcoinExchange
-{
+class BitcoinExchange {
 private:
-    std::map<time_t, double> _rate;
+	std::string _db_path;//database path
+	std::map<std::string, float> _db;//container map stock key value
+
 public:
-    BitcoinExchange();
-    BitcoinExchange(BitcoinExchange & src);
-    ~BitcoinExchange();
-    
-    BitcoinExchange & operator=(BitcoinExchange & rhv);
+//coplien canonical form
+	BitcoinExchange(void);
+	BitcoinExchange(const std::string db_path);
+	BitcoinExchange(const BitcoinExchange &src);
+	~BitcoinExchange(void);
 
+	BitcoinExchange	&operator =(const BitcoinExchange &src);
 
-    class NotGoodDatabase : public std::exception {
-        public:
-            virtual const char* what() const throw();
-    };
+	void constructDatabase(void);
+	std::string dbPath(void) const;
+	float getRate(std::string date);
+
+	class CantReadDataFile: public std::exception {
+	public:
+		virtual const char* what(void) const throw();
+	};
 };
 
 #endif
