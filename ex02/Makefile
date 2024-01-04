@@ -1,43 +1,42 @@
-NAME	=	PmergeMe
-O		=	obj
-I		=	inc
-S		=	src
-SRC		=	$S/main.cpp
-INCS	=	$I/PmergeMe.hpp
-TEMPLS	=	$S/PmergeMe.tpp
-OBJ		=	$(SRC:$S/%.cpp=$O/%.o)
-CC		=	c++
-CFLAGS	=	-Wall -Werror -Wextra -std=c++98 -I$I
-LDFLAGS	=
+.PHONY: all re clean fclean
 
-ERASE		=	\033[2K\r
-BLUE		=	\033[34m
-YELLOW		=	\033[33m
-GREEN		=	\033[32m
-END			=	\033[0m
+# Program name
+NAME	= btc
 
-all: $(NAME)
+# Compiler
+CC		= c++
+CFLAGS	= -Werror -Wextra -Wall -g -std=c++98
 
-$O:
-	@mkdir -p $O
+# Build files
+INC_PATH	= ./includes/
+INC			= -I $(INC_PATH)
+HEADERS		= ./includes/*.hpp
 
-$O/%.o: $S/%.cpp Makefile $(INCS) $(TEMPLS) | $O
-	$(CC) $(CFLAGS) -c $< -o $@
-	printf "$(BLUE)-> $<$(END)\n"
+SRC_PATH	= ./srcs/
+SRC			= $(wildcard $(SRC_PATH)*.cpp)
+OBJ_PATH	= ./objects/
+OBJ			= $(SRC:$(SRC_PATH)%.cpp=$(OBJ_PATH)%.o)
 
-$(NAME): $(OBJ)
-	$(CC) $(LDFLAGS) $(OBJ) -o $(NAME)
-	printf "$(GREEN)$(NAME) made$(END)\n"
+# Build rule
+all: $(OBJ_PATH) $(NAME)
 
+# Object-building rules
+$(OBJ_PATH):
+	mkdir -p $(OBJ_PATH)
+
+$(OBJ_PATH)%.o: $(SRC_PATH)%.cpp $(HEADERS)
+	$(CC) $(CFLAGS) -c $< -o $@ $(INC)
+
+# Program-building rule
+$(NAME): $(OBJ) Makefile $(HEADERS)
+	$(CC) $(CFLAGS) $(OBJ) -o $@ $(INC)
+
+# Cleaning rules
 clean:
-	rm -rdf $O
-	printf "$(YELLOW)$O removed$(END)\n"
+	rm -rf $(OBJ_PATH)
 
-fclean:	clean
+fclean: clean
 	rm -f $(NAME)
-	printf "$(YELLOW)$(NAME) removed$(END)\n"
 
+# Remake
 re: fclean all
-
-.PHONY: all clean fclean re
-.SILENT:

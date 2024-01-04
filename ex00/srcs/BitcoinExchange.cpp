@@ -39,7 +39,7 @@ std::string BitcoinExchange::dbPath(void) const
 	return this->_db_path;
 }
 
-//fonction qui recupere les données contenue ds la base de données en csv
+//fonction qui recupere les données contenue ds la base de données en .csv
 void BitcoinExchange::constructDatabase(void)
 {
 	// Open file
@@ -53,9 +53,9 @@ void BitcoinExchange::constructDatabase(void)
 	// Read line by line
 	int ctr = -1;
 	//for each line of the database.csv
-	while (getline(dbfile,line))
+	while (std::getline(dbfile,line))
 	{
-		ctr++;//the first line of the database is dat,exchange_rate so i think this line is here to avoid the first line of the database
+		ctr++;//the first line of the database is "date,exchange_rate" so this line is here to avoid the first line of the database
 		if (ctr == 0)
 			continue;
 
@@ -74,27 +74,22 @@ void BitcoinExchange::constructDatabase(void)
 				value = ptr;
 			else
 				ignore = true;
-			// std::cout << ptr  << std::endl;
 			ptr = strtok (NULL, ",");
 		}
 
-		// Check date format
-		if (!checkDateFormat(date) && !ignore)
-		{
+		// Check date format if error then ignore the rest of the tests
+		if (!checkDateFormat(date) && !ignore) {
 			std::cerr << "Error: Incorrect date format (" << date << ")" << std::endl;
 			ignore = true;
 		}
 		// Check value format
-		if (!checkValue(value) && !ignore)
-		{
+		if (!checkValue(value) && !ignore) {
 			std::cerr << "Error: Incorrect value format (" << value << ")" << std::endl;
 			ignore = true;
 		}
 
-		if (!ignore) {
-			this->_db[date] = strToFloat(value);
-			//std::cout << "db[\"" << date << "\"] = " << this->_db[date] << std::endl;
-		}
+		if (!ignore)
+			this->_db[date] = strToFloat(value);//stock the value into the map container at the index [date]
 	}
 	dbfile.close();
 	return;

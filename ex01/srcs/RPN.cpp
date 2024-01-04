@@ -1,22 +1,17 @@
-#include "RPN.hpp"
+#include "../includes/RPN.hpp"
 
-RPN::RPN(void)
-{
-
+RPN::RPN(void) {
 }
 
-RPN::RPN(const RPN &src)
-{
+RPN::RPN(const RPN &src) {
 	*this = src;
 }
 
-RPN::~RPN(void)
-{
+RPN::~RPN(void) {
 
 }
 
-RPN &RPN::operator= (const RPN &src)
-{
+RPN &RPN::operator= (const RPN &src) {
 	(void) src;
 	return *this;
 }

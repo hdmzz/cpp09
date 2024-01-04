@@ -6,14 +6,10 @@
 
 int main(int argc, char *argv[])
 {
-	if (argc != 2)
-	{
-		if (argc > 2)
-			std::cerr << "Error: too many arguments." << std::endl;
-		else
-			std::cerr << "Error: could not open file." << std::endl;
-		return (1);
-	}
+	if (argc != 2) {
+        std::cout << "Error : Program takes 1 file as argument" << std::endl;
+        return (1);
+    }
 
 	BitcoinExchange btc = BitcoinExchange("input/data.csv");
 	try
@@ -26,7 +22,7 @@ int main(int argc, char *argv[])
 		return (1);
 	}
 
-
+	//After the database construction
 	// Open file
 	std::string line;
 	std::ifstream inputfile(argv[1]);
@@ -39,7 +35,7 @@ int main(int argc, char *argv[])
 
 	// Read line by line
 	int ctr = -1;
-	while (getline(inputfile,line))
+	while (getline(inputfile, line))
 	{
 		ctr++;
 		if (ctr == 0)
@@ -47,7 +43,7 @@ int main(int argc, char *argv[])
 
 		bool ignore = false;
 
-		// Split on |
+		// Split on | same thing that in the database but with pipe
 		char *ptr;
 		ptr = std::strtok((char *)line.c_str(), " | ");
 		std::string date;
@@ -60,25 +56,20 @@ int main(int argc, char *argv[])
 				value = ptr;
 			else
 				ignore = true;
-			// std::cout << ptr  << std::endl;
 			ptr = strtok (NULL, " | ");
 		}
 
-		// Check date format
-		if (!checkDateFormat(date) && !ignore)
-		{
+		if (!checkDateFormat(date) && !ignore) {
 			std::cerr << "Error: Incorrect date format (" << date << ")" << std::endl;
 			ignore = true;
 		}
-		// Check value format
-		if (!checkValue(value) && !ignore)
-		{
+
+		if (!checkValue(value) && !ignore) {
 			std::cerr << "Error: Incorrect value format (" << value << ")" << std::endl;
 			ignore = true;
 		}
 
-		if (!ignore && strToFloat(value) > 1000)
-		{
+		if (!ignore && (strToFloat(value) > 1000)) {
 			std::cerr << "Error: Too large a number (" << value << ")" << std::endl;
 			ignore = true;
 		}
@@ -87,7 +78,7 @@ int main(int argc, char *argv[])
 			float result = strToFloat(value) * btc.getRate(date);
 			std::cout << date << " => " << value << " = " << result << std::endl;
 		}
-
 	}
 	inputfile.close();
+	return (0);
 }

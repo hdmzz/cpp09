@@ -1,7 +1,7 @@
 .PHONY: all re clean fclean
 
 # Program name
-NAME	= btc
+NAME	= RPN
 
 # Compiler
 CC		= c++
