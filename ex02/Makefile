@@ -1,7 +1,7 @@
 .PHONY: all re clean fclean
 
 # Program name
-NAME	= btc
+NAME	= PmergeMe
 
 # Compiler
 CC		= c++

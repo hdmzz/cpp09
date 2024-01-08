@@ -75,8 +75,13 @@ int main(int argc, char *argv[])
 		}
 
 		if (!ignore) {
-			float result = strToFloat(value) * btc.getRate(date);
-			std::cout << date << " => " << value << " = " << result << std::endl;
+			std::string start_date = "2009-01-02";
+			if (date < start_date)
+				std::cout << "Bitcoin didn't exist at this date : " << date << std::endl;
+			else {
+				float result = strToFloat(value) * btc.getRate(date);
+				std::cout << date << " => " << value << " = " << result << std::endl;
+			}
 		}
 	}
 	inputfile.close();

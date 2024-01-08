@@ -25,11 +25,11 @@ $(OBJ_PATH):
 	mkdir -p $(OBJ_PATH)
 
 $(OBJ_PATH)%.o: $(SRC_PATH)%.cpp $(HEADERS)
-	$(CC) $(CFLAGS) -c $< -o $@ $(INC)
+	$(CC) $(CFLAGS) -g3 -c $< -o $@ $(INC)
 
 # Program-building rule
 $(NAME): $(OBJ) Makefile $(HEADERS)
-	$(CC) $(CFLAGS) $(OBJ) -o $@ $(INC)
+	$(CC) $(CFLAGS) -g3 $(OBJ) -o $@ $(INC)
 
 # Cleaning rules
 clean:

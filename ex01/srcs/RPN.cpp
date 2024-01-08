@@ -21,32 +21,27 @@ float RPN::result(const std::string expr)
 	std::list<float> elems;
 
 	bool is_space = false;
+	// Iterate through the string
 	for (std::string::const_iterator it = expr.begin(); it != expr.end(); it++)
 	{
 		// If it's not a space, and the previous char is also not a space
 		if (*it != ' ' && !is_space && elems.size() != 0)
 			throw RPN::BadExpressionException();
-		is_space = *it == ' ';
+		is_space = (*it == ' ');
 
-		if (*it == ' ')
+		if (is_space)
 			continue;
-
-		// std::cout << *it << "  =>  ";
 		if (isdigit(*it))
-		{
-			elems.push_back(*it - '0');
-			// for (std::list<float>::const_iterator it2 = elems.begin(); it2 != elems.end(); it2++)
-			// 	std::cout << *it2 << " ";
-		}
+			elems.push_back(*it - '0');//- 0 to convert char to int
 		else
 		{
 			if (elems.size() < 2)
 				throw RPN::BadExpressionException();
 
-			float l1 = elems.back();
-			elems.pop_back();
-			float l2 = elems.back();
-			elems.pop_back();
+			float l1 = elems.back();//get the last element
+			elems.pop_back();//get rid of it
+			float l2 = elems.back();//the second element
+			elems.pop_back();//get rid of it
 
 			switch (*it)
 			{
@@ -68,12 +63,7 @@ float RPN::result(const std::string expr)
 				throw RPN::BadExpressionException();
 				break;
 			}
-
-			// for (std::list<float>::const_iterator it2 = elems.begin(); it2 != elems.end(); it2++)
-			// 	std::cout << *it2 << " ";
 		}
-
-		// std::cout << std::endl;
 	}
 
 	if (elems.size() != 1)

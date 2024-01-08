@@ -1,8 +1,9 @@
 #include "BitcoinExchange.hpp"
 #include "utils.hpp"
+#include <limits.h>
+#include <cstdlib>
 
 BitcoinExchange::BitcoinExchange(void)
-	: _db_path("input/data.csv")
 {
 }
 
@@ -97,38 +98,29 @@ void BitcoinExchange::constructDatabase(void)
 
 float BitcoinExchange::getRate(std::string date)
 {
-	if (this->_db.size() == 0)
-		return 0;
+    if (this->_db.size() == 0)
+        return 0;
+    if (this->_db.find(date) == this->_db.end()) {
+        std::map<std::string, float>::iterator it;
 
-	if (this->_db.find(date) == this->_db.end()) {
-		std::map<std::string, float>::iterator it;
+        std::string best_date;
+        int best_diff = INT_MAX;
 
-		std::string best_date;
-
-		for (it = this->_db.begin(); it != this->_db.end(); ++it) {
-			int comp = date.compare(it->first);
-
-			// Date can be alphabetically sorted
-			// ATM the comp is -1, the current date can be inserted
-
-			if (comp == -1)
-			{
-				if (it != this->_db.begin())
-					it--;
-
+        for (it = this->_db.begin(); it != this->_db.end(); ++it) {
+			int diff = abs(date.compare(it->first));
+			if (diff < best_diff) {
+				best_diff = diff;
 				best_date = it->first;
-				break;
 			}
-		}
-		if (best_date.empty())
-		{
-			it--;
-			best_date = it->first;
-		}
+        }
 
-		return this->_db[best_date];
-	}
-	return this->_db[date];
+        if (best_date.empty()) {
+            return 0; // or handle the case where no date is found after 2009-01-02
+        }
+
+        return this->_db[best_date];
+    }
+    return this->_db[date];
 }
 
 const char*	BitcoinExchange::CantReadDataFile::what(void) const throw()
